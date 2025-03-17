@@ -1,0 +1,119 @@
+.login-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+  }
+  
+  .illustration-side {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .illustration {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+  }
+  
+  .form-side {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .login-form {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .login-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .otp-description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .otp-inputs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .otp-input {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid #000; /* Black border */
+    border-radius: 5px;
+    outline: none;
+    background-color: white; /* White background */
+    color: #000; /* Black font color */
+  }
+  
+  .otp-input:focus {
+    border-color: #1a73e8; /* Blue border on focus for better UX */
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #666;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .login-button:hover {
+    background-color: #555;
+  }
+  
+  .resend-email {
+    font-size: 14px;
+    color: #666;
+    margin-top: 15px;
+  }
+  
+  .resend-link {
+    color: #1a73e8;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  
+  .resend-link:hover {
+    text-decoration: underline;
+  }
