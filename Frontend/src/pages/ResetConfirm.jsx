@@ -10,22 +10,19 @@ function ResetConfirm() {
   };
 
   return (
-    <div className="login-container">
+    <div className="confirm-container">
       {/* Left Side - Illustration */}
       <div className="illustration-side">
-        <div className="illustration">
-          {/* Placeholder for the illustration */}
-        </div>
       </div>
 
       {/* Right Side - Confirmation Message */}
       <div className="form-side">
-        <div className="login-form">
+        <div className="dialogue-background">
           <div className="confirmation-content">
             <div className="checkmark-icon">✔</div>
             <h2 className="confirmation-title">Your Password Updated</h2>
-            <p className="confirmation-message">successfully!</p>
-            <button className="login-button" onClick={handleOk}>
+            <p className="confirmation-message">Successfully!</p>
+            <button className="ok-button" onClick={handleOk}>
               OK
             </button>
           </div>
