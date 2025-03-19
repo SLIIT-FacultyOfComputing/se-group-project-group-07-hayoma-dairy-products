@@ -35,18 +35,17 @@ function EnterOTP() {
   };
 
   return (
-    <div className="login-container">
+    <div className="otp-container">
       <div className="illustration-side">
-        <div className="illustration">
         </div>
-      </div>
+
 
       <div className="form-side">
-        <div className="login-form">
+        <div className="otp-form">
           <button className="back-button" onClick={handleBack}>
             ←
           </button>
-          <h2 className="login-title">Check your email</h2>
+          <h2 className="otp-title">Check your email</h2>
           <p className="otp-description">
             Enter OTP sent to your email
           </p>
@@ -65,7 +64,7 @@ function EnterOTP() {
                 />
               ))}
             </div>
-            <button type="submit" className="login-button">
+            <button type="submit" className="verify-button">
               Verify
             </button>
           </form>

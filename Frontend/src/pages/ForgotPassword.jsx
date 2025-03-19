@@ -18,21 +18,18 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="login-container">
+    <div className="forgotPW-container">
       {/* Left Side - Illustration */}
       <div className="illustration-side">
-        <div className="illustration">
-          {/* Placeholder for the illustration */}
-        </div>
       </div>
 
       {/* Right Side - Forgot Password Form */}
       <div className="form-side">
-        <div className="login-form">
+        <div className="forgotPW-form">
           <button className="back-button" onClick={handleBack}>
             ←
           </button>
-          <h2 className="login-title">Forgot Password</h2>
+          <h2 className="forgotPW-title">Forgot Password</h2>
           <p className="forgot-password-description">
             Please enter your email to send OTP
           </p>
@@ -48,7 +45,7 @@ function ForgotPassword() {
                 required
               />
             </div>
-            <button type="submit" className="login-button">
+            <button type="submit" className="send-button">
               SEND OTP
             </button>
           </form>

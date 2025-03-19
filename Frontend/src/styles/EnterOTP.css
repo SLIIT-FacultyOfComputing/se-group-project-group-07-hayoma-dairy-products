@@ -1,25 +1,12 @@
-.login-container {
+.otp-container {
     display: flex;
     height: 100vh;
     width: 100vw;
     overflow: hidden;
   }
-  
-  .illustration-side {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .illustration {
-    text-align: center;
-    font-style: italic;
-    color: #888;
-  }
-  
+
+
+
   .form-side {
     flex: 1;
     display: flex;
@@ -27,8 +14,8 @@
     align-items: center;
   }
   
-  .login-form {
-    background-color: #fff;
+  .otp-form {
+    background-color: #ffffff;
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -49,13 +36,14 @@
     color: #666;
   }
   
-  .login-title {
+  .otp-title {
     font-size: 24px;
     font-weight: 500;
     color: #333;
     margin-bottom: 10px;
   }
-  
+
+/* description under title */
   .otp-description {
     font-size: 14px;
     color: #666;
@@ -85,10 +73,10 @@
     border-color: #1a73e8; /* Blue border on focus for better UX */
   }
   
-  .login-button {
+  .verify-button {
     width: 100%;
     padding: 12px;
-    background-color: #666;
+    background-color: #1a73e8;
     border: none;
     border-radius: 5px;
     color: #fff;
@@ -98,8 +86,8 @@
     transition: background-color 0.3s;
   }
   
-  .login-button:hover {
-    background-color: #555;
+  .verify-button:hover {
+    background-color: #1557b0;
   }
   
   .resend-email {
