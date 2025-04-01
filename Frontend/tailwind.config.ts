@@ -26,12 +26,12 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#3b82f6", // Blue-500
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#f8fafc",
-          foreground: "#0f172a",
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -52,6 +52,19 @@ const config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        // Navy blue colors for dark mode
+        navy: {
+          100: "#E0E5F2",
+          200: "#C2CCE5",
+          300: "#A3B3D9",
+          400: "#8599CC",
+          500: "#6680BF",
+          600: "#4766B3",
+          700: "#294D99",
+          800: "#1A3366",
+          900: "#0D1A33",
+          950: "#060D1A",
         },
       },
       borderRadius: {

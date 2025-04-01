@@ -1,27 +1,13 @@
-"use client";
+"use client"
 
-import type React from "react";
-
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import type React from "react"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { toast } from "sonner"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
   Dialog,
   DialogContent,
@@ -30,9 +16,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Plus, Search } from "lucide-react";
-import type { InventoryItem } from "@/lib/types";
+} from "@/components/ui/dialog"
+import { Plus, Search } from "lucide-react"
+import type { InventoryItem } from "@/lib/types"
 
 // Mock data - would be replaced with actual API calls
 const mockInventory: InventoryItem[] = [
@@ -41,25 +27,25 @@ const mockInventory: InventoryItem[] = [
   { id: "3", name: "Yogurt", quantity: 100, unit: "cups" },
   { id: "4", name: "Butter", quantity: 30, unit: "packs" },
   { id: "5", name: "Cream", quantity: 20, unit: "liters" },
-];
+]
 
 export default function ShopInventory() {
-  const [inventory, setInventory] = useState<InventoryItem[]>(mockInventory);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isAddItemOpen, setIsAddItemOpen] = useState(false);
+  const [inventory, setInventory] = useState<InventoryItem[]>(mockInventory)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [isAddItemOpen, setIsAddItemOpen] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     quantity: 0,
     unit: "",
-  });
+  })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
       [name]: name === "quantity" ? Number.parseInt(value) || 0 : value,
-    }));
-  };
+    }))
+  }
 
   const handleAddItem = () => {
     // BACKEND INTEGRATION: Add inventory item API call
@@ -68,35 +54,31 @@ export default function ShopInventory() {
       name: formData.name,
       quantity: formData.quantity,
       unit: formData.unit,
-    };
+    }
 
-    setInventory((prev) => [...prev, newItem]);
-    toast.success("Item added to inventory");
-    setIsAddItemOpen(false);
-    resetForm();
-  };
+    setInventory((prev) => [...prev, newItem])
+    toast.success("Item added to inventory")
+    setIsAddItemOpen(false)
+    resetForm()
+  }
 
   const handleUpdateQuantity = (id: string, newQuantity: number) => {
     // BACKEND INTEGRATION: Update inventory quantity API call
-    const updatedInventory = inventory.map((item) =>
-      item.id === id ? { ...item, quantity: newQuantity } : item
-    );
+    const updatedInventory = inventory.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item))
 
-    setInventory(updatedInventory);
-    toast.success("Inventory updated");
-  };
+    setInventory(updatedInventory)
+    toast.success("Inventory updated")
+  }
 
   const resetForm = () => {
     setFormData({
       name: "",
       quantity: 0,
       unit: "",
-    });
-  };
+    })
+  }
 
-  const filteredInventory = inventory.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredInventory = inventory.filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
 
   return (
     <div className="space-y-6">
@@ -112,9 +94,7 @@ export default function ShopInventory() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Add Inventory Item</DialogTitle>
-              <DialogDescription>
-                Add a new item to your shop's inventory.
-              </DialogDescription>
+              <DialogDescription>Add a new item to your shop's inventory.</DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
@@ -162,9 +142,7 @@ export default function ShopInventory() {
       <Card>
         <CardHeader>
           <CardTitle>Inventory Items</CardTitle>
-          <CardDescription>
-            Manage your shop's inventory items and quantities.
-          </CardDescription>
+          <CardDescription>Manage your shop's inventory items and quantities.</CardDescription>
           <div className="flex items-center gap-2 mt-2">
             <Search className="h-4 w-4 text-muted-foreground" />
             <Input
@@ -196,21 +174,14 @@ export default function ShopInventory() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() =>
-                          handleUpdateQuantity(item.id, item.quantity + 1)
-                        }
+                        onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
                       >
                         +
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() =>
-                          handleUpdateQuantity(
-                            item.id,
-                            Math.max(0, item.quantity - 1)
-                          )
-                        }
+                        onClick={() => handleUpdateQuantity(item.id, Math.max(0, item.quantity - 1))}
                         disabled={item.quantity <= 0}
                       >
                         -
@@ -221,10 +192,7 @@ export default function ShopInventory() {
               ))}
               {filteredInventory.length === 0 && (
                 <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    className="text-center py-4 text-muted-foreground"
-                  >
+                  <TableCell colSpan={4} className="text-center py-4 text-muted-foreground">
                     No items found
                   </TableCell>
                 </TableRow>
@@ -234,5 +202,6 @@ export default function ShopInventory() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
+

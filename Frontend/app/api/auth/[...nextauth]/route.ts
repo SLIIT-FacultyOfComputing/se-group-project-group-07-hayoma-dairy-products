@@ -1,117 +1,72 @@
-// app/api/auth/[...nextauth]/route.ts
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { readNameFromJwt, readRoleFromJwt } from "@/lib/auth";
-import { jwtDecode } from "jwt-decode";
-
-const API_BASE_URL =
-  process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL;
-
-interface DecodedJWT {
-  sub: string;
-  role: string;
-  exp: number;
-}
+import type { NextAuthOptions } from "next-auth";
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text" },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log("🔐 Received credentials:", credentials);
-
-        if (!credentials) return null;
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
 
         try {
-          const res = await fetch(
-            "http://localhost:8080/api/auth/authenticate",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                username: credentials.username,
-                password: credentials.password,
-              }),
-            }
-          );
+          // Use the API_URL environment variable
+          const response = await fetch(`${process.env.API_URL}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            }),
+          });
 
-          console.log("📡 API Response status:", res.status);
-
-          if (!res.ok) {
-            const errorText = await res.text();
-            console.log("❌ Auth API failed:", errorText);
+          if (!response.ok) {
             return null;
           }
 
-          const data = await res.json();
-          console.log("✅ API Response JSON:", data);
-
-          const username = readNameFromJwt(data.access_token);
-          const role = readRoleFromJwt(data.access_token);
-
-          console.log("👤 Decoded username:", username);
-          console.log("🔓 Decoded role:", role);
-
-          if (!username || !role) return null;
-
-          return {
-            id: username,
-            accessToken: data.access_token,
-            refreshToken: data.refresh_token,
-            username,
-            role,
-          };
+          const user = await response.json();
+          return user;
         } catch (error) {
-          console.error("🔥 Error in authorize:", error);
+          console.error("Authentication error:", error);
           return null;
         }
       },
     }),
   ],
-  pages: {
-    signIn: "/login",
-  },
   callbacks: {
     async jwt({ token, user }) {
+      // Add role and id to JWT token when user signs in
       if (user) {
-        const typedUser = user as unknown as {
-          accessToken: string;
-          refreshToken: string;
-          username: string;
-          role: string;
-        };
-        const decoded = jwtDecode<DecodedJWT>(typedUser.accessToken);
-
-        token.accessToken = typedUser.accessToken;
-        token.refreshToken = typedUser.refreshToken;
-        token.username = typedUser.username;
-        token.role = typedUser.role;
-        token.accessTokenExpires = decoded.exp * 1000;
+        token.role = user.role;
+        token.id = user.id;
       }
-
-      if (Date.now() < (token.accessTokenExpires as number)) {
-        return token;
-      }
-
-      // TODO: refresh token flow
       return token;
     },
     async session({ session, token }) {
-      session.user = {
-        username: token.username as string,
-        role: token.role as string,
-        accessToken: token.accessToken as string,
-      };
+      // Add role and id to session from JWT token
+      if (session.user) {
+        session.user.role = token.role as string;
+        session.user.id = token.id as string;
+      }
       return session;
     },
+  },
+  pages: {
+    signIn: "/login",
+    error: "/login",
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };

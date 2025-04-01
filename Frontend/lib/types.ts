@@ -1,4 +1,4 @@
-export type UserRole = "admin" | "shop" | "supplier" | "driver"
+export type UserRole = "ADMIN" | "SHOP" | "SUPPLIER" | "DRIVER"
 
 export interface User {
   id: string
@@ -31,6 +31,10 @@ export interface InventoryItem {
   name: string
   quantity: number
   unit: string
+  category: string
+  lastUpdated: string
+  threshold: number
+  supplier: string
 }
 
 export interface Product {
@@ -38,6 +42,31 @@ export interface Product {
   name: string
   price: number
   unit: string
+  category: string
+  description: string
+  image?: string
+  inStock: boolean
+  supplier: string
+}
+
+export interface Order {
+  id: string
+  shopId: string
+  shopName: string
+  date: string
+  status: "PENDING" | "APPROVED" | "SHIPPED" | "DELIVERED" | "CANCELLED"
+  items: OrderItem[]
+  total: number
+  paymentStatus: "PAID" | "UNPAID"
+  deliveryDate?: string
+}
+
+export interface OrderItem {
+  productId: string
+  productName: string
+  quantity: number
+  price: number
+  subtotal: number
 }
 
 export interface Delivery {
@@ -45,11 +74,17 @@ export interface Delivery {
   from: string
   to: string
   items: DeliveryItem[]
-  status: "pending" | "in-progress" | "delivered"
+  status: "PENDING" | "IN_PROGRESS" | "DELIVERED"
 }
 
 export interface DeliveryItem {
   productId: string
   quantity: number
+}
+
+export interface SalesData {
+  date: string
+  revenue: number
+  orders: number
 }
 

@@ -7,13 +7,15 @@ import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Logo } from "@/components/logo"
+import { usePathname } from "next/navigation"
 
 export default function Navbar() {
   const { user, logout } = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   return (
-    <header className="w-full border-b bg-white dark:bg-gray-950">
+    <header className="w-full border-b bg-background">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         <Logo />
         <nav className="hidden md:flex gap-6">
@@ -29,18 +31,9 @@ export default function Navbar() {
         </nav>
         <div className="hidden md:flex gap-4">
           <ThemeToggle />
-          {user ? (
-            <>
-              <Link href={`/dashboard/${user.role}`}>
-                <Button variant="outline">Dashboard</Button>
-              </Link>
-              <Button onClick={logout}>Logout</Button>
-            </>
-          ) : (
-            <Link href="/login">
-              <Button>Login</Button>
-            </Link>
-          )}
+          <Link href="/login">
+            <Button>Login</Button>
+          </Link>
         </div>
         <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -61,22 +54,10 @@ export default function Navbar() {
             <div className="py-2">
               <ThemeToggle />
             </div>
-            {user ? (
-              <>
-                <Link href={`/dashboard/${user.role}`}>
-                  <Button variant="outline" className="w-full">
-                    Dashboard
-                  </Button>
-                </Link>
-                <Button onClick={logout} className="w-full">
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <Link href="/login" className="w-full">
-                <Button className="w-full">Login</Button>
-              </Link>
-            )}
+            {/* Dashboard links removed for cleaner UI */}
+            <Link href="/login" className="w-full">
+              <Button className="w-full">Login</Button>
+            </Link>
           </nav>
         </div>
       )}
