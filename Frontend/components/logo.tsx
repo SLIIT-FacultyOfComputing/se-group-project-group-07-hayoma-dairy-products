@@ -7,7 +7,7 @@ export function Logo() {
       <div className="relative h-8 w-8 overflow-hidden">
         <Image src="/logo.svg" alt="Hayoma Dairy Logo" width={32} height={32} priority />
       </div>
-      <span className="text-xl font-bold hidden sm:inline-block">Hayoma Dairy</span>
+      <span className="text-xl font-bold text-blue-600 dark:text-blue-400">Hayoma Dairy</span>
     </Link>
   )
 }

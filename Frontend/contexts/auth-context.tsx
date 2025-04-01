@@ -1,8 +1,7 @@
 "use client"
 
 import type React from "react"
-
-import { createContext, useContext } from "react"
+import { createContext, useContext, useState } from "react"
 import { useRouter } from "next/navigation"
 import { signIn, signOut, useSession } from "next-auth/react"
 import { toast } from "sonner"
@@ -19,12 +18,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const { data: session, status } = useSession()
-
-  const isLoading = status === "loading"
-  const user = session?.user || null
+  const [isLoading, setIsLoading] = useState(false)
 
   const login = async (email: string, password: string) => {
     try {
+      setIsLoading(true)
+
+      // BACKEND INTEGRATION: Authentication with NextAuth
       const result = await signIn("credentials", {
         email,
         password,
@@ -33,36 +33,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (result?.error) {
         toast.error("Invalid credentials")
-        throw new Error(result.error)
+        throw new Error("Invalid credentials")
       }
 
       if (result?.ok) {
-        toast.success("Login successful")
+        // BACKEND INTEGRATION: Redirect based on user role
+        // This will be handled by the session callback in NextAuth
+        router.push("/dashboard/admin")
         router.refresh()
-
-        // Give time for the session to update
-        setTimeout(() => {
-          if (session?.user?.role) {
-            router.push(`/dashboard/${session.user.role}`)
-          } else {
-            router.push("/dashboard/admin")
-          }
-        }, 300)
+        toast.success("Logged in successfully")
       }
     } catch (error) {
       console.error("Login error:", error)
       throw error
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const logout = async () => {
+    // BACKEND INTEGRATION: Sign out with NextAuth
     await signOut({ redirect: false })
-    toast.success("Logged out successfully")
     router.push("/login")
-    router.refresh()
+    toast.success("Logged out successfully")
   }
 
-  return <AuthContext.Provider value={{ user, login, logout, isLoading }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider
+      value={{
+        user: session?.user,
+        login,
+        logout,
+        isLoading: status === "loading" || isLoading,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  )
 }
 
 export const useAuth = () => {
