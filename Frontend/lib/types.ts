@@ -2,9 +2,12 @@ export type UserRole = "ADMIN" | "SHOP" | "SUPPLIER" | "DRIVER"
 
 export interface User {
   id: string
+  username: string
   name: string
   email: string
   role: UserRole
+  isActive?: boolean
+  lastLogin?: string
 }
 
 export interface ShopData {
@@ -35,6 +38,18 @@ export interface InventoryItem {
   lastUpdated: string
   threshold: number
   supplier: string
+}
+
+export interface MaterialRequest {
+  id: string
+  materialName: string
+  quantity: number
+  unit: string
+  supplier: string
+  requestDate: string
+  status: "PENDING" | "APPROVED" | "REJECTED"
+  urgency: "LOW" | "MEDIUM" | "HIGH"
+  notes?: string
 }
 
 export interface Product {
@@ -87,4 +102,3 @@ export interface SalesData {
   revenue: number
   orders: number
 }
-

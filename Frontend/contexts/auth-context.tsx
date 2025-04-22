@@ -1,82 +1,150 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState } from "react"
-import { useRouter } from "next/navigation"
-import { signIn, signOut, useSession } from "next-auth/react"
-import { toast } from "sonner"
+
+import { createContext, useContext, useState, useEffect } from "react"
+import { useRouter, usePathname } from "next/navigation"
+import type { User, UserRole } from "@/lib/types"
 
 interface AuthContextType {
-  user: any
-  login: (email: string, password: string) => Promise<void>
+  user: User | null
+  login: (username: string, password: string) => Promise<boolean>
   logout: () => void
   isLoading: boolean
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  login: async () => false,
+  logout: () => {},
+  isLoading: true,
+})
+
+export const useAuth = () => useContext(AuthContext)
+
+// Mock users for demo
+const mockUsers = [
+  {
+    id: "1",
+    username: "admin",
+    name: "John Admin",
+    email: "admin@hayoma.com",
+    role: "admin" as UserRole,
+    isActive: true,
+    lastLogin: new Date().toISOString(),
+  },
+  {
+    id: "2",
+    username: "shop",
+    name: "Sarah Shop",
+    email: "shop@hayoma.com",
+    role: "shop" as UserRole,
+    isActive: true,
+    lastLogin: new Date().toISOString(),
+  },
+  {
+    id: "3",
+    username: "supplier",
+    name: "Mike Supplier",
+    email: "supplier@hayoma.com",
+    role: "supplier" as UserRole,
+    isActive: true,
+    lastLogin: new Date().toISOString(),
+  },
+  {
+    id: "4",
+    username: "driver",
+    name: "Dave Driver",
+    email: "driver@hayoma.com",
+    role: "driver" as UserRole,
+    isActive: true,
+    lastLogin: new Date().toISOString(),
+  },
+]
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
-  const { data: session, status } = useSession()
-  const [isLoading, setIsLoading] = useState(false)
+  const pathname = usePathname()
 
-  const login = async (email: string, password: string) => {
-    try {
+  // Auto-login based on URL path for demo purposes
+  useEffect(() => {
+    const checkAutoLogin = () => {
       setIsLoading(true)
 
-      // BACKEND INTEGRATION: Authentication with NextAuth
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      })
-
-      if (result?.error) {
-        toast.error("Invalid credentials")
-        throw new Error("Invalid credentials")
+      // Check if user is already logged in
+      const storedUser = localStorage.getItem("user")
+      if (storedUser) {
+        setUser(JSON.parse(storedUser))
+        setIsLoading(false)
+        return
       }
 
-      if (result?.ok) {
-        // BACKEND INTEGRATION: Redirect based on user role
-        // This will be handled by the session callback in NextAuth
-        router.push("/dashboard/admin")
-        router.refresh()
-        toast.success("Logged in successfully")
+      // Auto-login based on URL path for demo
+      if (pathname?.includes("/dashboard/admin")) {
+        const adminUser = mockUsers.find((u) => u.role === "admin")
+        if (adminUser) {
+          setUser(adminUser)
+          localStorage.setItem("user", JSON.stringify(adminUser))
+        }
+      } else if (pathname?.includes("/dashboard/shop")) {
+        const shopUser = mockUsers.find((u) => u.role === "shop")
+        if (shopUser) {
+          setUser(shopUser)
+          localStorage.setItem("user", JSON.stringify(shopUser))
+        }
+      } else if (pathname?.includes("/dashboard/supplier")) {
+        const supplierUser = mockUsers.find((u) => u.role === "supplier")
+        if (supplierUser) {
+          setUser(supplierUser)
+          localStorage.setItem("user", JSON.stringify(supplierUser))
+        }
+      } else if (pathname?.includes("/dashboard/driver")) {
+        const driverUser = mockUsers.find((u) => u.role === "driver")
+        if (driverUser) {
+          setUser(driverUser)
+          localStorage.setItem("user", JSON.stringify(driverUser))
+        }
       }
-    } catch (error) {
-      console.error("Login error:", error)
-      throw error
-    } finally {
+
       setIsLoading(false)
     }
+
+    checkAutoLogin()
+  }, [pathname])
+
+  const login = async (username: string, password: string) => {
+    setIsLoading(true)
+
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
+    // Find user by username (in a real app, this would be a server call)
+    const foundUser = mockUsers.find((u) => u.username === username && u.isActive)
+
+    if (foundUser) {
+      setUser(foundUser)
+      localStorage.setItem("user", JSON.stringify(foundUser))
+      setIsLoading(false)
+
+      // Update last login time
+      foundUser.lastLogin = new Date().toISOString()
+
+      // Redirect to appropriate dashboard
+      router.push(`/dashboard/${foundUser.role.toLowerCase()}`)
+      return true
+    }
+
+    setIsLoading(false)
+    return false
   }
 
-  const logout = async () => {
-    // BACKEND INTEGRATION: Sign out with NextAuth
-    await signOut({ redirect: false })
+  const logout = () => {
+    setUser(null)
+    localStorage.removeItem("user")
     router.push("/login")
-    toast.success("Logged out successfully")
   }
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user: session?.user,
-        login,
-        logout,
-        isLoading: status === "loading" || isLoading,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={{ user, login, logout, isLoading }}>{children}</AuthContext.Provider>
 }
-
-export const useAuth = () => {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
-  }
-  return context
-}
-
