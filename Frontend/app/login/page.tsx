@@ -1,120 +1,147 @@
 "use client"
 
 import type React from "react"
+
 import { useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import Link from "next/link"
-import Image from "next/image"
 import { Logo } from "@/components/logo"
-import { AlertCircle } from "lucide-react"
+import { toast } from "sonner"
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [error, setError] = useState<string | null>(null)
-  const { login, isLoading } = useAuth()
+  const [isLoading, setIsLoading] = useState(false)
+  const { login } = useAuth()
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError(null)
+
+    if (!username || !password) {
+      toast.error("Please enter both username and password")
+      return
+    }
+
+    setIsLoading(true)
 
     try {
-      await login(email, password)
+      const success = await login(username, password)
+
+      if (!success) {
+        toast.error("Invalid username or password")
+      }
     } catch (error) {
-      console.error("Login failed:", error)
-      setError("Login failed. Please check your credentials.")
+      console.error("Login error:", error)
+      toast.error("An error occurred during login")
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
-    <div className="flex min-h-screen flex-col md:flex-row">
-      {/* Left side - Login form */}
-      <div className="flex flex-1 items-center justify-center p-6 bg-white dark:bg-gray-950">
-        <div className="w-full max-w-md">
-          <div className="mb-8 flex justify-center md:hidden">
+    <div className="min-h-screen flex items-center justify-center bg-blue-50/30 dark:bg-gray-900/20 p-4">
+      <Card className="w-full max-w-md border-blue-100 dark:border-gray-700">
+        <CardHeader className="space-y-1 text-center">
+          <div className="flex justify-center mb-4">
             <Logo />
           </div>
-          <Card>
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl font-bold">Login</CardTitle>
-              <CardDescription>Enter your credentials to access your account</CardDescription>
-            </CardHeader>
-            <form onSubmit={handleSubmit}>
-              <CardContent className="space-y-4">
-                {error && (
-                  <div className="bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 p-3 rounded-md flex items-start gap-2">
-                    <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                    <p>{error}</p>
-                  </div>
-                )}
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
-                    <Link href="/forgot-password" className="text-sm text-primary hover:underline">
-                      Forgot password?
-                    </Link>
-                  </div>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">
-                  <p>Enter your credentials to access the dashboard.</p>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Logging in..." : "Login"}
-                </Button>
-              </CardFooter>
-            </form>
-          </Card>
-        </div>
-      </div>
-
-      {/* Right side - Image */}
-      <div className="hidden md:flex flex-1 relative bg-blue-50 dark:bg-navy-900">
-        <div className="absolute top-8 left-8">
-          <Logo />
-        </div>
-        <div className="flex items-center justify-center w-full h-full p-12">
-          <div className="max-w-md">
-            <div className="relative w-full aspect-square">
-              <Image
-                src="/dairy-illustration.svg"
-                alt="Dairy farm illustration"
-                fill
-                className="object-contain"
-                priority
+          <CardTitle className="text-2xl font-bold">Login to Hayoma Dairy</CardTitle>
+          <CardDescription>Enter your credentials to access your account</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                type="text"
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                disabled={isLoading}
               />
             </div>
-            <h2 className="mt-8 text-2xl font-bold text-center">Hayoma Dairy Management</h2>
-            <p className="mt-2 text-center text-muted-foreground">
-              Streamline your dairy operations with our comprehensive management system
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">Password</Label>
+                <Link href="/forgot-password" className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400">
+                  Forgot password?
+                </Link>
+              </div>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
+              />
+            </div>
+            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={isLoading}>
+              {isLoading ? "Logging in..." : "Login"}
+            </Button>
+          </form>
+
+          <div className="mt-4 text-center text-sm">
+            <p className="text-muted-foreground">Demo Accounts:</p>
+            <div className="grid grid-cols-2 gap-2 mt-2">
+              <div className="text-left p-2 bg-blue-50 dark:bg-gray-800 rounded">
+                <p>
+                  <strong>Admin:</strong> admin
+                </p>
+                <p>
+                  <strong>Password:</strong> password
+                </p>
+              </div>
+              <div className="text-left p-2 bg-blue-50 dark:bg-gray-800 rounded">
+                <p>
+                  <strong>Shop:</strong> shop
+                </p>
+                <p>
+                  <strong>Password:</strong> password
+                </p>
+              </div>
+              <div className="text-left p-2 bg-blue-50 dark:bg-gray-800 rounded">
+                <p>
+                  <strong>Supplier:</strong> supplier
+                </p>
+                <p>
+                  <strong>Password:</strong> password
+                </p>
+              </div>
+              <div className="text-left p-2 bg-blue-50 dark:bg-gray-800 rounded">
+                <p>
+                  <strong>Driver:</strong> driver
+                </p>
+                <p>
+                  <strong>Password:</strong> password
+                </p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="flex flex-col space-y-4">
+          <div className="text-center text-sm text-muted-foreground">
+            <p>
+              By continuing, you agree to our{" "}
+              <Link href="#" className="underline underline-offset-4 hover:text-primary">
+                Terms of Service
+              </Link>{" "}
+              and{" "}
+              <Link href="#" className="underline underline-offset-4 hover:text-primary">
+                Privacy Policy
+              </Link>
+              .
             </p>
           </div>
-        </div>
-      </div>
+        </CardFooter>
+      </Card>
     </div>
   )
 }
-

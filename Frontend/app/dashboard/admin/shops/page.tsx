@@ -20,6 +20,7 @@ import {
 import { Search, Plus, Edit, Trash2, MapPin } from "lucide-react"
 import { toast } from "sonner"
 import { Textarea } from "@/components/ui/textarea"
+import { mockShops } from "@/lib/mock-data" // Add this import
 
 // Shop type definition
 interface Shop {
@@ -54,18 +55,18 @@ export default function ShopManagement() {
     const fetchShops = async () => {
       try {
         setIsLoading(true)
-        // Fetch shops from API
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shops`)
+        // In a real app, this would be an API call
+        // const response = await fetch("/api/shops")
+        // if (!response.ok) {
+        //   throw new Error("Failed to fetch shops")
+        // }
+        // const data = await response.json()
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch shops")
-        }
-
-        const data = await response.json()
-        setShops(data)
+        // Use mock data instead
+        setShops(mockShops)
       } catch (error) {
         console.error("Failed to fetch shops:", error)
-        toast.error("Failed to fetch shops")
+        toast.error("Failed to load shop data")
       } finally {
         setIsLoading(false)
       }
@@ -81,18 +82,25 @@ export default function ShopManagement() {
 
   const handleAddShop = async () => {
     try {
-      // Add shop via API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shops`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      })
+      // In a real app, this would be an API call
+      // const response = await fetch("/api/shops", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(formData),
+      // })
+      //
+      // if (!response.ok) {
+      //   throw new Error("Failed to add shop")
+      // }
+      //
+      // const newShop = await response.json()
 
-      if (!response.ok) {
-        throw new Error("Failed to add shop")
+      // Create a new shop with mock ID
+      const newShop = {
+        id: `shop${shops.length + 1}`,
+        ...formData,
       }
 
-      const newShop = await response.json()
       setShops((prev) => [...prev, newShop])
       toast.success("Shop added successfully")
       setIsAddShopOpen(false)
@@ -107,18 +115,25 @@ export default function ShopManagement() {
     try {
       if (!currentShop) return
 
-      // Update shop via API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shops/${currentShop.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      })
+      // In a real app, this would be an API call
+      // const response = await fetch(`/api/shops/${currentShop.id}`, {
+      //   method: "PUT",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(formData),
+      // })
+      //
+      // if (!response.ok) {
+      //   throw new Error("Failed to update shop")
+      // }
+      //
+      // const updatedShop = await response.json()
 
-      if (!response.ok) {
-        throw new Error("Failed to update shop")
+      // Update shop locally
+      const updatedShop = {
+        ...currentShop,
+        ...formData,
       }
 
-      const updatedShop = await response.json()
       setShops((prev) => prev.map((shop) => (shop.id === currentShop.id ? updatedShop : shop)))
       toast.success("Shop updated successfully")
       setIsEditShopOpen(false)
@@ -131,15 +146,16 @@ export default function ShopManagement() {
 
   const handleDeleteShop = async (id: string) => {
     try {
-      // Delete shop via API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shops/${id}`, {
-        method: "DELETE",
-      })
+      // In a real app, this would be an API call
+      // const response = await fetch(`/api/shops/${id}`, {
+      //   method: "DELETE",
+      // })
+      //
+      // if (!response.ok) {
+      //   throw new Error("Failed to delete shop")
+      // }
 
-      if (!response.ok) {
-        throw new Error("Failed to delete shop")
-      }
-
+      // Just filter locally
       setShops((prev) => prev.filter((shop) => shop.id !== id))
       toast.success("Shop deleted successfully")
     } catch (error) {
@@ -408,4 +424,3 @@ export default function ShopManagement() {
     </div>
   )
 }
-
