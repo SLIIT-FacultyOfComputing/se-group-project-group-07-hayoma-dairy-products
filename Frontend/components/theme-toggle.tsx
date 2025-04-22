@@ -31,4 +31,3 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
     </div>
   )
 }
-

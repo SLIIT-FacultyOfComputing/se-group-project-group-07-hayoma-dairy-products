@@ -22,6 +22,7 @@ import { toast } from "sonner"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
+import { mockSuppliers } from "@/lib/mock-data" // Add this import
 
 // Supplier type definition
 interface Supplier {
@@ -62,18 +63,18 @@ export default function SupplierManagement() {
     const fetchSuppliers = async () => {
       try {
         setIsLoading(true)
-        // Fetch suppliers from API
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/suppliers`)
+        // In a real app, this would be an API call
+        // const response = await fetch("/api/suppliers")
+        // if (!response.ok) {
+        //   throw new Error("Failed to fetch suppliers")
+        // }
+        // const data = await response.json()
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch suppliers")
-        }
-
-        const data = await response.json()
-        setSuppliers(data)
+        // Use mock data instead
+        setSuppliers(mockSuppliers)
       } catch (error) {
         console.error("Failed to fetch suppliers:", error)
-        toast.error("Failed to fetch suppliers")
+        toast.error("Failed to load supplier data")
       } finally {
         setIsLoading(false)
       }
@@ -97,18 +98,25 @@ export default function SupplierManagement() {
 
   const handleAddSupplier = async () => {
     try {
-      // Add supplier via API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/suppliers`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      })
+      // In a real app, this would be an API call
+      // const response = await fetch("/api/suppliers", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(formData),
+      // })
+      //
+      // if (!response.ok) {
+      //   throw new Error("Failed to add supplier")
+      // }
+      //
+      // const newSupplier = await response.json()
 
-      if (!response.ok) {
-        throw new Error("Failed to add supplier")
+      // Create a new supplier with mock ID
+      const newSupplier = {
+        id: `sup${suppliers.length + 1}`,
+        ...formData,
       }
 
-      const newSupplier = await response.json()
       setSuppliers((prev) => [...prev, newSupplier])
       toast.success("Supplier added successfully")
       setIsAddSupplierOpen(false)
@@ -123,18 +131,25 @@ export default function SupplierManagement() {
     try {
       if (!currentSupplier) return
 
-      // Update supplier via API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/suppliers/${currentSupplier.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      })
+      // In a real app, this would be an API call
+      // const response = await fetch(`/api/suppliers/${currentSupplier.id}`, {
+      //   method: "PUT",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(formData),
+      // })
+      //
+      // if (!response.ok) {
+      //   throw new Error("Failed to update supplier")
+      // }
+      //
+      // const updatedSupplier = await response.json()
 
-      if (!response.ok) {
-        throw new Error("Failed to update supplier")
+      // Update supplier locally
+      const updatedSupplier = {
+        ...currentSupplier,
+        ...formData,
       }
 
-      const updatedSupplier = await response.json()
       setSuppliers((prev) => prev.map((supplier) => (supplier.id === currentSupplier.id ? updatedSupplier : supplier)))
       toast.success("Supplier updated successfully")
       setIsEditSupplierOpen(false)
@@ -147,15 +162,16 @@ export default function SupplierManagement() {
 
   const handleDeleteSupplier = async (id: string) => {
     try {
-      // Delete supplier via API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/suppliers/${id}`, {
-        method: "DELETE",
-      })
+      // In a real app, this would be an API call
+      // const response = await fetch(`/api/suppliers/${id}`, {
+      //   method: "DELETE",
+      // })
+      //
+      // if (!response.ok) {
+      //   throw new Error("Failed to delete supplier")
+      // }
 
-      if (!response.ok) {
-        throw new Error("Failed to delete supplier")
-      }
-
+      // Just filter locally
       setSuppliers((prev) => prev.filter((supplier) => supplier.id !== id))
       toast.success("Supplier deleted successfully")
     } catch (error) {
@@ -536,4 +552,3 @@ export default function SupplierManagement() {
     </div>
   )
 }
-
