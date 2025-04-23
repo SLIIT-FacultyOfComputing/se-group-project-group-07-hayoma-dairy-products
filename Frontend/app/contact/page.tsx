@@ -1,35 +1,24 @@
-"use client";
+import type { Metadata } from "next"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Instagram } from "lucide-react"
+import Link from "next/link"
+import Image from "next/image"
 
-import type { Metadata } from "next";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
-  Facebook,
-  Twitter,
-  Instagram,
-} from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
+export const metadata: Metadata = {
+  title: "Contact Us | Hayoma Dairy",
+  description: "Get in touch with Hayoma Dairy for inquiries, feedback, or support.",
+}
 
 export default function ContactPage() {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Header Banner */}
       <div className="relative h-64 w-full overflow-hidden">
-        <Image
-          src="/contact-banner.jpg"
-          alt="Dairy farm landscape"
-          fill
-          className="object-cover"
-          priority
-        />
+        <Image src="/contact-banner.jpg" alt="Dairy farm landscape" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
           <div className="text-center text-white">
             <h1 className="text-4xl font-bold mb-2">Contact Us</h1>
@@ -52,11 +41,7 @@ export default function ContactPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="john@example.com"
-                    />
+                    <Input id="email" type="email" placeholder="john@example.com" />
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -65,11 +50,7 @@ export default function ContactPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="message">Message</Label>
-                  <Textarea
-                    id="message"
-                    placeholder="Your message here..."
-                    rows={5}
-                  />
+                  <Textarea id="message" placeholder="Your message here..." rows={5} />
                 </div>
                 <Button type="submit" className="w-full sm:w-auto">
                   Send Message
@@ -89,11 +70,11 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-medium">Address</h3>
                       <p className="text-muted-foreground">
-                        no,154/3
+                        123 Dairy Farm Road
                         <br />
-                        coorays place
+                        Milkville, CA 90210
                         <br />
-                        athurugiriya
+                        United States
                       </p>
                     </div>
                   </div>
@@ -101,16 +82,14 @@ export default function ContactPage() {
                     <Phone className="h-5 w-5 text-primary mt-0.5" />
                     <div>
                       <h3 className="font-medium">Phone</h3>
-                      <p className="text-muted-foreground">071-7942270</p>
+                      <p className="text-muted-foreground">+1 (555) 123-4567</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <Mail className="h-5 w-5 text-primary mt-0.5" />
                     <div>
                       <h3 className="font-medium">Email</h3>
-                      <p className="text-muted-foreground">
-                        hayomamilkproducts3@gmail.com
-                      </p>
+                      <p className="text-muted-foreground">info@hayomadairy.com</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -162,18 +141,18 @@ export default function ContactPage() {
         <div className="mt-12">
           <h2 className="text-2xl font-bold mb-6">Our Location</h2>
           <div className="h-96 w-full rounded-lg overflow-hidden border">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.9636414715756!2d79.99417087456271!3d6.894952493104214!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae251184e651cb3%3A0x6b3a9d09d89583aa!2sCooray%27s%20Place!5e0!3m2!1sen!2slk!4v1742962697380!5m2!1sen!2slk"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+            <div className="relative h-full w-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
+              <Image src="/map-placeholder.jpg" alt="Map location" fill className="object-cover" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-lg">
+                  <MapPin className="h-8 w-8 text-primary mx-auto mb-2" />
+                  <p className="font-bold">Hayoma Dairy</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
