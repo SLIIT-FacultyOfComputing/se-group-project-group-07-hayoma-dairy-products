@@ -34,7 +34,20 @@ public class SupplyServiceImpl implements SupplyService {
         return dto;
     }
 
-  
+    @Override
+    public List<SupplyRequestDTO> getAllRequests() {
+        return requestRepo.findAll().stream().map(r ->
+                SupplyRequestDTO.builder()
+                        .id(r.getId())
+                        .productName(r.getProductName())
+                        .unit(r.getUnit())
+                        .quantity(r.getQuantity())
+                        .requestDate(r.getRequestDate())
+                        .deliveryDate(r.getDeliveryDate())
+                        .status(r.getStatus())
+                        .notes(r.getNotes())
+                        .build()).collect(Collectors.toList());
+    }
 
     @Override
     public SupplyRequestDTO updateRequestStatus(Long id, String status) {
