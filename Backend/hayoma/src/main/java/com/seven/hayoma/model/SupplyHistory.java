@@ -15,7 +15,11 @@ public class SupplyHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
+    private String supplyId;
+    private String productName;
+    private double quantity;
+    private String unit;
+    private LocalDate date;
 
     @Enumerated(EnumType.STRING)
     private SupplyStatus status;
