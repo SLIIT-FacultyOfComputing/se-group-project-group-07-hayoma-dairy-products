@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SupplyServiceImpl implements SupplyService {
 
-    //private final SupplyRequestRepository requestRepo;
-    //private final SupplyHistoryRepository historyRepo;
+    private final SupplyRequestRepository requestRepo;
+    private final SupplyHistoryRepository historyRepo;
 
     @Override
     public SupplyRequestDTO createRequest(SupplyRequestDTO dto) {
