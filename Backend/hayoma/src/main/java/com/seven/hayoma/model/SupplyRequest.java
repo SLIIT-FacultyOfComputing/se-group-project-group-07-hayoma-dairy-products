@@ -21,8 +21,8 @@ public class SupplyRequest {
     private LocalDate requestDate;
     private LocalDate deliveryDate;
 
-    // @Enumerated(EnumType.STRING)
-    // private SupplyStatus status;
+    @Enumerated(EnumType.STRING)
+    private SupplyStatus status;
 
     private String notes;
 }
