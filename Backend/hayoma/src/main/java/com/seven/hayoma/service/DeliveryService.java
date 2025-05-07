@@ -11,6 +11,6 @@ public interface DeliveryService {
     DeliveryDTO confirmByDriver(Long deliveryId);
     DeliveryDTO confirmPayment(Long deliveryId);
     List<DeliveryDTO> getAllDeliveries();
-    List<DeliveryDTO> getDeliveriesByDriver(Long driverId);
+
     List<DeliveryDTO> getDeliveriesByOrigin(Long originId, String originType);
 }
