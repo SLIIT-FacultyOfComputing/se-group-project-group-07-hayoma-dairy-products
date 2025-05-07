@@ -30,12 +30,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         return toDTO(deliveryRepository.save(delivery));
     }
 
-    @Override
-    public DeliveryDTO confirmByOrigin(Long deliveryId) {
-        Delivery delivery = getDeliveryOrThrow(deliveryId);
-        delivery.setConfirmedByOrigin(true);
-        return toDTO(deliveryRepository.save(delivery));
-    }
+
 
     @Override
     public DeliveryDTO confirmByDriver(Long deliveryId) {
