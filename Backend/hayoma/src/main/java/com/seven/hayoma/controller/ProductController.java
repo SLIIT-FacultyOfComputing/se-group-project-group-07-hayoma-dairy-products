@@ -3,6 +3,7 @@ package com.seven.hayoma.controller;
 import com.seven.hayoma.dto.ProductDTO;
 import com.seven.hayoma.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,13 +24,14 @@ public class ProductController {
     public ProductDTO getProduct(@PathVariable Long id) {
         return service.getProductById(id);
     }
-
-    @PostMapping
+    
+    @PostMapping("/api/products")
     public ProductDTO createProduct(@RequestBody ProductDTO dto) {
         return service.createProduct(dto);
     }
 
     @DeleteMapping("/{id}")
+    @PostAuthorize("hasRole('ADMIN')")
     public void deleteProduct(@PathVariable Long id) {
         service.deleteProduct(id);
     }
