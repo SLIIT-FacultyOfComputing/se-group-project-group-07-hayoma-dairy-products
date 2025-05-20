@@ -102,3 +102,15 @@ export interface SalesData {
   revenue: number
   orders: number
 }
+
+export interface SupplyRequest {
+  id: string
+  supplier: string
+  product: string
+  quantity: string
+  requestDate: string
+  deliveryDate: string
+  status: "pending" | "approved" | "completed" | "rejected"
+  notes: string
+  urgency: "LOW" | "MEDIUM" | "HIGH"
+}

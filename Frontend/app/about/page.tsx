@@ -155,7 +155,12 @@ export default function AboutPage() {
             ].map((member, index) => (
               <div key={index} className="text-center">
                 <div className="relative h-64 w-64 mx-auto rounded-full overflow-hidden mb-4">
-                  <Image src={member.image || "/placeholder.svg"} alt={member.name} fill className="object-cover" />
+                  <Image
+                    src={member.image || "/placeholder.svg?height=256&width=256"}
+                    alt={member.name}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
                 <h3 className="text-xl font-bold">{member.name}</h3>
                 <p className="text-primary font-medium mb-2">{member.position}</p>

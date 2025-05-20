@@ -1,7 +1,7 @@
-import Link from "next/link"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import Navbar from "@/components/navbar"
+import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import Navbar from "@/components/navbar";
 
 export default function Home() {
   return (
@@ -26,7 +26,8 @@ export default function Home() {
                     Hayoma Dairy Company
                   </h1>
                   <p className="max-w-[600px] text-blue-50 md:text-xl">
-                    Delivering fresh dairy products to your doorstep. Quality you can trust, service you can rely on.
+                    Delivering fresh dairy products to your doorstep. Quality
+                    you can trust, service you can rely on.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -51,7 +52,12 @@ export default function Home() {
               </div>
               <div className="flex items-center justify-center">
                 <div className="relative w-full h-[350px] md:h-[550px] rounded-2xl overflow-hidden shadow-2xl">
-                  <Image alt="Dairy Products" className="object-cover object-center" fill src="/hero-image.jpg" />
+                  <Image
+                    alt="Dairy Products"
+                    className="object-cover object-center"
+                    fill
+                    src="/logo.svg"
+                  />
                 </div>
               </div>
             </div>
@@ -73,7 +79,8 @@ export default function Home() {
                   Why Choose Hayoma Dairy?
                 </h2>
                 <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  We combine tradition with innovation to deliver the finest dairy products to your doorstep.
+                  We combine tradition with innovation to deliver the finest
+                  dairy products to your doorstep.
                 </p>
               </div>
             </div>
@@ -102,9 +109,12 @@ export default function Home() {
                     <path d="M16 18a4 4 0 0 0-8 0"></path>
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-blue-600 dark:text-navy-300">Fresh Products</h3>
+                <h3 className="text-xl font-bold text-blue-600 dark:text-navy-300">
+                  Fresh Products
+                </h3>
                 <p className="text-center text-gray-500 dark:text-gray-400">
-                  We deliver fresh dairy products daily to ensure quality and taste.
+                  We deliver fresh dairy products daily to ensure quality and
+                  taste.
                 </p>
               </div>
               <div className="flex flex-col items-center space-y-2 rounded-lg border border-blue-100 dark:border-navy-800/30 bg-white dark:bg-gray-900 p-6 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
@@ -124,9 +134,12 @@ export default function Home() {
                     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-blue-600 dark:text-navy-300">Quality Assurance</h3>
+                <h3 className="text-xl font-bold text-blue-600 dark:text-navy-300">
+                  Quality Assurance
+                </h3>
                 <p className="text-center text-gray-500 dark:text-gray-400">
-                  All our products undergo strict quality checks before delivery.
+                  All our products undergo strict quality checks before
+                  delivery.
                 </p>
               </div>
               <div className="flex flex-col items-center space-y-2 rounded-lg border border-blue-100 dark:border-navy-800/30 bg-white dark:bg-gray-900 p-6 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
@@ -146,9 +159,12 @@ export default function Home() {
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-blue-600 dark:text-navy-300">Trusted Partners</h3>
+                <h3 className="text-xl font-bold text-blue-600 dark:text-navy-300">
+                  Trusted Partners
+                </h3>
                 <p className="text-center text-gray-500 dark:text-gray-400">
-                  We partner with local farmers who share our commitment to quality.
+                  We partner with local farmers who share our commitment to
+                  quality.
                 </p>
               </div>
             </div>
@@ -170,9 +186,12 @@ export default function Home() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">What Our Customers Say</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                  What Our Customers Say
+                </h2>
                 <p className="max-w-[900px] text-blue-50 dark:text-navy-100 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Don't just take our word for it. Here's what our customers have to say about Hayoma Dairy.
+                  Don't just take our word for it. Here's what our customers
+                  have to say about Hayoma Dairy.
                 </p>
               </div>
             </div>
@@ -186,7 +205,8 @@ export default function Home() {
                 <div className="space-y-2 text-center">
                   <h3 className="text-xl font-bold">John Doe</h3>
                   <p className="text-blue-50 dark:text-navy-100">
-                    "The quality of Hayoma's dairy products is unmatched. I've been a loyal customer for years!"
+                    "The quality of Hayoma's dairy products is unmatched. I've
+                    been a loyal customer for years!"
                   </p>
                   <div className="flex justify-center">
                     <div className="flex">
@@ -216,7 +236,8 @@ export default function Home() {
                 <div className="space-y-2 text-center">
                   <h3 className="text-xl font-bold">Jane Smith</h3>
                   <p className="text-blue-50 dark:text-navy-100">
-                    "Their delivery is always on time, and the products are always fresh. Highly recommended!"
+                    "Their delivery is always on time, and the products are
+                    always fresh. Highly recommended!"
                   </p>
                   <div className="flex justify-center">
                     <div className="flex">
@@ -246,7 +267,8 @@ export default function Home() {
                 <div className="space-y-2 text-center">
                   <h3 className="text-xl font-bold">Robert Johnson</h3>
                   <p className="text-blue-50 dark:text-navy-100">
-                    "As a cafe owner, I rely on Hayoma for consistent quality. They never disappoint!"
+                    "As a cafe owner, I rely on Hayoma for consistent quality.
+                    They never disappoint!"
                   </p>
                   <div className="flex justify-center">
                     <div className="flex">
@@ -274,7 +296,8 @@ export default function Home() {
       <footer className="w-full border-t py-6 bg-gradient-to-r from-blue-50 to-white dark:from-navy-950 dark:to-gray-950">
         <div className="container flex flex-col items-center justify-center gap-4 md:flex-row md:gap-8">
           <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-            © {new Date().getFullYear()} Hayoma Dairy Company. All rights reserved.
+            © {new Date().getFullYear()} Hayoma Dairy Company. All rights
+            reserved.
           </p>
           <div className="flex gap-4">
             <Link
@@ -289,12 +312,15 @@ export default function Home() {
             >
               About
             </Link>
-            <Link href="#" className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-navy-400">
+            <Link
+              href="#"
+              className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-navy-400"
+            >
               Privacy
             </Link>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }
