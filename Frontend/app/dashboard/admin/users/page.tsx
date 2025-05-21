@@ -1,16 +1,35 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { UserRole } from "@/lib/types"
-import { toast } from "sonner"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { UserRole } from "@/lib/types";
+import { toast } from "sonner";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -19,9 +38,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Plus, Pencil, Trash, Search, Filter, CheckCircle, XCircle } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+} from "@/components/ui/dialog";
+import {
+  Plus,
+  Pencil,
+  Trash,
+  Search,
+  Filter,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 // Mock users data
 const mockUsers = [
@@ -79,16 +106,16 @@ const mockUsers = [
     isActive: true,
     lastLogin: "2023-05-10 10:05:18",
   },
-]
+];
 
 export default function UserManagement() {
-  const [users, setUsers] = useState(mockUsers)
-  const [isAddUserOpen, setIsAddUserOpen] = useState(false)
-  const [isEditUserOpen, setIsEditUserOpen] = useState(false)
-  const [currentUser, setCurrentUser] = useState<any>(null)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [roleFilter, setRoleFilter] = useState<string>("all")
-  const [statusFilter, setStatusFilter] = useState<string>("all")
+  const [users, setUsers] = useState(mockUsers);
+  const [isAddUserOpen, setIsAddUserOpen] = useState(false);
+  const [isEditUserOpen, setIsEditUserOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [roleFilter, setRoleFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
   const [formData, setFormData] = useState({
     username: "",
@@ -97,48 +124,48 @@ export default function UserManagement() {
     role: "shop" as UserRole,
     password: "",
     isActive: true,
-  })
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleRoleChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, role: value as UserRole }))
-  }
+    setFormData((prev) => ({ ...prev, role: value as UserRole }));
+  };
 
   const handleStatusChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, isActive: value === "active" }))
-  }
+    setFormData((prev) => ({ ...prev, isActive: value === "active" }));
+  };
 
   const validateForm = () => {
     if (!formData.username) {
-      toast.error("Username is required")
-      return false
+      toast.error("Username is required");
+      return false;
     }
     if (!formData.name) {
-      toast.error("Name is required")
-      return false
+      toast.error("Name is required");
+      return false;
     }
     if (!formData.email) {
-      toast.error("Email is required")
-      return false
+      toast.error("Email is required");
+      return false;
     }
     if (!formData.password && !currentUser) {
-      toast.error("Password is required for new users")
-      return false
+      toast.error("Password is required for new users");
+      return false;
     }
-    return true
-  }
+    return true;
+  };
 
   const handleAddUser = () => {
-    if (!validateForm()) return
+    if (!validateForm()) return;
 
     // Check if username already exists
     if (users.some((user) => user.username === formData.username)) {
-      toast.error("Username already exists")
-      return
+      toast.error("Username already exists");
+      return;
     }
 
     // Create new user
@@ -150,23 +177,26 @@ export default function UserManagement() {
       role: formData.role,
       isActive: formData.isActive,
       lastLogin: "Never",
-    }
+    };
 
-    setUsers((prev) => [...prev, newUser])
-    toast.success("User added successfully")
-    setIsAddUserOpen(false)
-    resetForm()
-  }
+    setUsers((prev) => [...prev, newUser]);
+    toast.success("User added successfully");
+    setIsAddUserOpen(false);
+    resetForm();
+  };
 
   const handleEditUser = () => {
-    if (!currentUser) return
+    if (!currentUser) return;
 
-    if (!validateForm()) return
+    if (!validateForm()) return;
 
     // Check if username already exists (except current user)
-    if (formData.username !== currentUser.username && users.some((user) => user.username === formData.username)) {
-      toast.error("Username already exists")
-      return
+    if (
+      formData.username !== currentUser.username &&
+      users.some((user) => user.username === formData.username)
+    ) {
+      toast.error("Username already exists");
+      return;
     }
 
     setUsers((prev) =>
@@ -180,18 +210,18 @@ export default function UserManagement() {
               role: formData.role,
               isActive: formData.isActive,
             }
-          : user,
-      ),
-    )
-    toast.success("User updated successfully")
-    setIsEditUserOpen(false)
-    resetForm()
-  }
+          : user
+      )
+    );
+    toast.success("User updated successfully");
+    setIsEditUserOpen(false);
+    resetForm();
+  };
 
   const handleDeleteUser = (id: string) => {
-    setUsers((prev) => prev.filter((user) => user.id !== id))
-    toast.success("User deleted successfully")
-  }
+    setUsers((prev) => prev.filter((user) => user.id !== id));
+    toast.success("User deleted successfully");
+  };
 
   const toggleUserStatus = (id: string) => {
     setUsers((prev) =>
@@ -201,14 +231,14 @@ export default function UserManagement() {
               ...user,
               isActive: !user.isActive,
             }
-          : user,
-      ),
-    )
-    toast.success("User status updated")
-  }
+          : user
+      )
+    );
+    toast.success("User status updated");
+  };
 
   const openEditDialog = (user: any) => {
-    setCurrentUser(user)
+    setCurrentUser(user);
     setFormData({
       username: user.username,
       name: user.name,
@@ -216,9 +246,9 @@ export default function UserManagement() {
       role: user.role as UserRole,
       password: "", // Password field is empty when editing
       isActive: user.isActive,
-    })
-    setIsEditUserOpen(true)
-  }
+    });
+    setIsEditUserOpen(true);
+  };
 
   const resetForm = () => {
     setFormData({
@@ -228,19 +258,21 @@ export default function UserManagement() {
       role: "shop" as UserRole,
       password: "",
       isActive: true,
-    })
-    setCurrentUser(null)
-  }
+    });
+    setCurrentUser(null);
+  };
 
   // Apply filters and search
-  let filteredUsers = [...users]
+  let filteredUsers = [...users];
 
   if (roleFilter !== "all") {
-    filteredUsers = filteredUsers.filter((user) => user.role === roleFilter)
+    filteredUsers = filteredUsers.filter((user) => user.role === roleFilter);
   }
 
   if (statusFilter !== "all") {
-    filteredUsers = filteredUsers.filter((user) => (statusFilter === "active" ? user.isActive : !user.isActive))
+    filteredUsers = filteredUsers.filter((user) =>
+      statusFilter === "active" ? user.isActive : !user.isActive
+    );
   }
 
   if (searchTerm) {
@@ -248,8 +280,8 @@ export default function UserManagement() {
       (user) =>
         user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase()),
-    )
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   }
 
   return (
@@ -257,7 +289,9 @@ export default function UserManagement() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">User Management</h1>
-          <p className="text-muted-foreground">Manage user accounts and permissions</p>
+          <p className="text-muted-foreground">
+            Manage user accounts and permissions
+          </p>
         </div>
         <Dialog open={isAddUserOpen} onOpenChange={setIsAddUserOpen}>
           <DialogTrigger asChild>
@@ -269,7 +303,9 @@ export default function UserManagement() {
           <DialogContent className="sm:max-w-[550px]">
             <DialogHeader>
               <DialogTitle>Add New User</DialogTitle>
-              <DialogDescription>Create a new user account with specific role permissions.</DialogDescription>
+              <DialogDescription>
+                Create a new user account with specific role permissions.
+              </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-2 gap-4">
@@ -319,7 +355,10 @@ export default function UserManagement() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="role">Role</Label>
-                  <Select value={formData.role} onValueChange={handleRoleChange}>
+                  <Select
+                    value={formData.role}
+                    onValueChange={handleRoleChange}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select role" />
                     </SelectTrigger>
@@ -333,7 +372,10 @@ export default function UserManagement() {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="status">Status</Label>
-                  <Select value={formData.isActive ? "active" : "inactive"} onValueChange={handleStatusChange}>
+                  <Select
+                    value={formData.isActive ? "active" : "inactive"}
+                    onValueChange={handleStatusChange}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
@@ -361,7 +403,9 @@ export default function UserManagement() {
             <CardTitle className="text-lg font-medium">Total Users</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">{users.length}</div>
+            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+              {users.length}
+            </div>
             <p className="text-sm text-muted-foreground">Across all roles</p>
           </CardContent>
         </Card>
@@ -373,15 +417,21 @@ export default function UserManagement() {
             <div className="text-3xl font-bold text-green-600 dark:text-green-400">
               {users.filter((user) => user.isActive).length}
             </div>
-            <p className="text-sm text-muted-foreground">Currently active accounts</p>
+            <p className="text-sm text-muted-foreground">
+              Currently active accounts
+            </p>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 border-blue-100 dark:border-gray-700">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-medium">Inactive Users</CardTitle>
+            <CardTitle className="text-lg font-medium">
+              Inactive Users
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-amber-500">{users.filter((user) => !user.isActive).length}</div>
+            <div className="text-3xl font-bold text-amber-500">
+              {users.filter((user) => !user.isActive).length}
+            </div>
             <p className="text-sm text-muted-foreground">Disabled accounts</p>
           </CardContent>
         </Card>
@@ -390,7 +440,9 @@ export default function UserManagement() {
       <Card className="border-blue-100 dark:border-gray-700">
         <CardHeader>
           <CardTitle>Users</CardTitle>
-          <CardDescription>Manage all users and their roles in the system.</CardDescription>
+          <CardDescription>
+            Manage all users and their roles in the system.
+          </CardDescription>
           <div className="flex flex-col sm:flex-row gap-4 mt-4">
             <div className="relative flex-1">
               <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -450,7 +502,9 @@ export default function UserManagement() {
               <TableBody>
                 {filteredUsers.map((user) => (
                   <TableRow key={user.id} className="bg-white dark:bg-gray-950">
-                    <TableCell className="font-medium">{user.username}</TableCell>
+                    <TableCell className="font-medium">
+                      {user.username}
+                    </TableCell>
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>
@@ -459,10 +513,10 @@ export default function UserManagement() {
                           user.role === "admin"
                             ? "default"
                             : user.role === "shop"
-                              ? "secondary"
-                              : user.role === "supplier"
-                                ? "outline"
-                                : "destructive"
+                            ? "secondary"
+                            : user.role === "supplier"
+                            ? "outline"
+                            : "destructive"
                         }
                         className="capitalize"
                       >
@@ -472,7 +526,7 @@ export default function UserManagement() {
                     <TableCell>
                       {user.isActive ? (
                         <Badge
-                          variant="success"
+                          variant="default"
                           className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
                         >
                           Active
@@ -489,18 +543,32 @@ export default function UserManagement() {
                     <TableCell>{user.lastLogin}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => openEditDialog(user)}>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => openEditDialog(user)}
+                        >
                           <Pencil className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => toggleUserStatus(user.id)}
-                          className={user.isActive ? "text-red-500" : "text-green-500"}
+                          className={
+                            user.isActive ? "text-red-500" : "text-green-500"
+                          }
                         >
-                          {user.isActive ? <XCircle className="h-4 w-4" /> : <CheckCircle className="h-4 w-4" />}
+                          {user.isActive ? (
+                            <XCircle className="h-4 w-4" />
+                          ) : (
+                            <CheckCircle className="h-4 w-4" />
+                          )}
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleDeleteUser(user.id)}>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDeleteUser(user.id)}
+                        >
                           <Trash className="h-4 w-4" />
                         </Button>
                       </div>
@@ -509,7 +577,10 @@ export default function UserManagement() {
                 ))}
                 {filteredUsers.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-4 text-muted-foreground">
+                    <TableCell
+                      colSpan={7}
+                      className="text-center py-4 text-muted-foreground"
+                    >
                       No users found
                     </TableCell>
                   </TableRow>
@@ -524,25 +595,45 @@ export default function UserManagement() {
         <DialogContent className="sm:max-w-[550px]">
           <DialogHeader>
             <DialogTitle>Edit User</DialogTitle>
-            <DialogDescription>Update user information and role permissions.</DialogDescription>
+            <DialogDescription>
+              Update user information and role permissions.
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="edit-username">Username</Label>
-                <Input id="edit-username" name="username" value={formData.username} onChange={handleInputChange} />
+                <Input
+                  id="edit-username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="edit-name">Full Name</Label>
-                <Input id="edit-name" name="name" value={formData.name} onChange={handleInputChange} />
+                <Input
+                  id="edit-name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                />
               </div>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="edit-email">Email</Label>
-              <Input id="edit-email" name="email" type="email" value={formData.email} onChange={handleInputChange} />
+              <Input
+                id="edit-email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+              />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="edit-password">Password (leave blank to keep current)</Label>
+              <Label htmlFor="edit-password">
+                Password (leave blank to keep current)
+              </Label>
               <Input
                 id="edit-password"
                 name="password"
@@ -569,7 +660,10 @@ export default function UserManagement() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="edit-status">Status</Label>
-                <Select value={formData.isActive ? "active" : "inactive"} onValueChange={handleStatusChange}>
+                <Select
+                  value={formData.isActive ? "active" : "inactive"}
+                  onValueChange={handleStatusChange}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
@@ -590,5 +684,5 @@ export default function UserManagement() {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

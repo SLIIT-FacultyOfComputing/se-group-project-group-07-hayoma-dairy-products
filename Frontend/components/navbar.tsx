@@ -46,7 +46,7 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
             <Link href="/" className="flex items-center">
-              <Logo className="h-8 w-auto" />
+              <Logo linkWrapper={false} />
             </Link>
           </motion.div>
 

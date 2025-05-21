@@ -22,14 +22,14 @@ const AuthContext = createContext<AuthContextType>({
 
 export const useAuth = () => useContext(AuthContext)
 
-// Mock users for demo
+// Mock users for demo - ensuring all roles are in uppercase
 const mockUsers = [
   {
     id: "1",
     username: "admin",
     name: "John Admin",
     email: "admin@hayoma.com",
-    role: "admin" as UserRole,
+    role: "ADMIN" as UserRole,
     isActive: true,
     lastLogin: new Date().toISOString(),
   },
@@ -38,7 +38,7 @@ const mockUsers = [
     username: "shop",
     name: "Sarah Shop",
     email: "shop@hayoma.com",
-    role: "shop" as UserRole,
+    role: "SHOP" as UserRole,
     isActive: true,
     lastLogin: new Date().toISOString(),
   },
@@ -47,7 +47,7 @@ const mockUsers = [
     username: "supplier",
     name: "Mike Supplier",
     email: "supplier@hayoma.com",
-    role: "supplier" as UserRole,
+    role: "SUPPLIER" as UserRole,
     isActive: true,
     lastLogin: new Date().toISOString(),
   },
@@ -56,7 +56,7 @@ const mockUsers = [
     username: "driver",
     name: "Dave Driver",
     email: "driver@hayoma.com",
-    role: "driver" as UserRole,
+    role: "DRIVER" as UserRole,
     isActive: true,
     lastLogin: new Date().toISOString(),
   },
@@ -76,32 +76,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Check if user is already logged in
       const storedUser = localStorage.getItem("user")
       if (storedUser) {
-        setUser(JSON.parse(storedUser))
+        try {
+          setUser(JSON.parse(storedUser))
+        } catch (error) {
+          console.error("Error parsing user from localStorage:", error)
+          localStorage.removeItem("user") // Remove invalid data
+          setUser(null) // Set user to null to avoid issues
+        }
         setIsLoading(false)
         return
       }
 
-      // Auto-login based on URL path for demo
+      // Auto-login based on URL path for demo - using uppercase roles
       if (pathname?.includes("/dashboard/admin")) {
-        const adminUser = mockUsers.find((u) => u.role === "admin")
+        const adminUser = mockUsers.find((u) => u.role === "ADMIN")
         if (adminUser) {
           setUser(adminUser)
           localStorage.setItem("user", JSON.stringify(adminUser))
         }
       } else if (pathname?.includes("/dashboard/shop")) {
-        const shopUser = mockUsers.find((u) => u.role === "shop")
+        const shopUser = mockUsers.find((u) => u.role === "SHOP")
         if (shopUser) {
           setUser(shopUser)
           localStorage.setItem("user", JSON.stringify(shopUser))
         }
       } else if (pathname?.includes("/dashboard/supplier")) {
-        const supplierUser = mockUsers.find((u) => u.role === "supplier")
+        const supplierUser = mockUsers.find((u) => u.role === "SUPPLIER")
         if (supplierUser) {
           setUser(supplierUser)
           localStorage.setItem("user", JSON.stringify(supplierUser))
         }
       } else if (pathname?.includes("/dashboard/driver")) {
-        const driverUser = mockUsers.find((u) => u.role === "driver")
+        const driverUser = mockUsers.find((u) => u.role === "DRIVER")
         if (driverUser) {
           setUser(driverUser)
           localStorage.setItem("user", JSON.stringify(driverUser))

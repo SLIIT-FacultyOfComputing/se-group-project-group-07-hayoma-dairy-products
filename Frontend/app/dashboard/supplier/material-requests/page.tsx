@@ -1,8 +1,21 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -10,20 +23,46 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { format } from "date-fns"
-import { CalendarIcon, CheckCircle, XCircle } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { toast } from "@/components/ui/use-toast"
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { CalendarIcon, CheckCircle, XCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+// Type definition for material requests
+interface MaterialRequest {
+  id: string;
+  title: string;
+  description: string;
+  requestedBy: string;
+  requestDate: string;
+  status: "pending" | "accepted" | "rejected";
+  urgency: "high" | "medium" | "low";
+  quantity: number;
+  unit: string;
+  materialType: string;
+  notes: string;
+  estimatedDelivery?: string;
+  responseNotes?: string;
+}
 
 // Mock data for material requests
-const mockMaterialRequests = [
+const mockMaterialRequests: MaterialRequest[] = [
   {
     id: "MR-001",
     title: "Raw Milk Supply",
@@ -79,34 +118,55 @@ const mockMaterialRequests = [
     notes: "Must be suitable for food processing equipment",
     responseNotes: "Currently out of stock, can supply alternative brand",
   },
-]
+];
 
 export default function MaterialRequestsPage() {
-  const [materialRequests, setMaterialRequests] = useState(mockMaterialRequests)
-  const [selectedRequest, setSelectedRequest] = useState(null)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [responseType, setResponseType] = useState("")
-  const [estimatedDelivery, setEstimatedDelivery] = useState(null)
-  const [responseNotes, setResponseNotes] = useState("")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [urgencyFilter, setUrgencyFilter] = useState("all")
+  const [materialRequests, setMaterialRequests] =
+    useState(mockMaterialRequests);
+  const [selectedRequest, setSelectedRequest] =
+    useState<MaterialRequest | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [responseType, setResponseType] = useState("");
+  const [estimatedDelivery, setEstimatedDelivery] = useState<Date | undefined>(
+    undefined
+  );
+  const [responseNotes, setResponseNotes] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [urgencyFilter, setUrgencyFilter] = useState("all");
 
-  const handleViewRequest = (request) => {
-    setSelectedRequest(request)
-    setIsDialogOpen(true)
-    setResponseType("")
-    setEstimatedDelivery(null)
-    setResponseNotes("")
+  interface MaterialRequest {
+    id: string;
+    title: string;
+    description: string;
+    requestedBy: string;
+    requestDate: string;
+    status: "pending" | "accepted" | "rejected";
+    urgency: "high" | "medium" | "low";
+    quantity: number;
+    unit: string;
+    materialType: string;
+    notes: string;
+    estimatedDelivery?: string;
+    responseNotes?: string;
   }
+
+  type ResponseType = "" | "accept" | "reject";
+
+  const handleViewRequest = (request: MaterialRequest) => {
+    setSelectedRequest(request);
+    setIsDialogOpen(true);
+    setResponseType("");
+    setEstimatedDelivery(undefined);
+    setResponseNotes("");
+  };
 
   const handleResponse = () => {
     if (responseType === "accept" && !estimatedDelivery) {
-      toast({
-        title: "Error",
-        description: "Please select an estimated delivery date",
-        variant: "destructive",
-      })
-      return
+      return;
+    }
+
+    if (!selectedRequest) {
+      return;
     }
 
     const updatedRequests = materialRequests.map((req) => {
@@ -114,80 +174,102 @@ export default function MaterialRequestsPage() {
         return {
           ...req,
           status: responseType === "accept" ? "accepted" : "rejected",
-          estimatedDelivery: estimatedDelivery ? format(estimatedDelivery, "yyyy-MM-dd") : undefined,
+          estimatedDelivery: estimatedDelivery
+            ? format(estimatedDelivery, "yyyy-MM-dd")
+            : undefined,
           responseNotes,
-        }
+        } as MaterialRequest;
       }
-      return req
-    })
+      return req;
+    });
 
-    setMaterialRequests(updatedRequests)
-    setIsDialogOpen(false)
-
-    toast({
-      title: `Request ${responseType === "accept" ? "Accepted" : "Rejected"}`,
-      description: `You have ${responseType === "accept" ? "accepted" : "rejected"} the material request ${selectedRequest.id}`,
-      variant: responseType === "accept" ? "default" : "destructive",
-    })
-  }
+    setMaterialRequests(updatedRequests);
+    setIsDialogOpen(false);
+  };
 
   const filteredRequests = materialRequests.filter((req) => {
-    const matchesStatus = statusFilter === "all" || req.status === statusFilter
-    const matchesUrgency = urgencyFilter === "all" || req.urgency === urgencyFilter
-    return matchesStatus && matchesUrgency
-  })
+    const matchesStatus = statusFilter === "all" || req.status === statusFilter;
+    const matchesUrgency =
+      urgencyFilter === "all" || req.urgency === urgencyFilter;
+    return matchesStatus && matchesUrgency;
+  });
 
-  const getStatusBadge = (status) => {
+  interface StatusBadgeProps {
+    status: "pending" | "accepted" | "rejected" | string;
+  }
+
+  const getStatusBadge = (status: StatusBadgeProps["status"]): JSX.Element => {
     switch (status) {
       case "pending":
         return (
-          <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-300">
+          <Badge
+            variant="outline"
+            className="bg-yellow-100 text-yellow-800 border-yellow-300"
+          >
             Pending
           </Badge>
-        )
+        );
       case "accepted":
         return (
-          <Badge variant="outline" className="bg-green-100 text-green-800 border-green-300">
+          <Badge
+            variant="outline"
+            className="bg-green-100 text-green-800 border-green-300"
+          >
             Accepted
           </Badge>
-        )
+        );
       case "rejected":
         return (
-          <Badge variant="outline" className="bg-red-100 text-red-800 border-red-300">
+          <Badge
+            variant="outline"
+            className="bg-red-100 text-red-800 border-red-300"
+          >
             Rejected
           </Badge>
-        )
+        );
       default:
-        return <Badge variant="outline">Unknown</Badge>
+        return <Badge variant="outline">Unknown</Badge>;
     }
+  };
+
+  interface UrgencyBadgeProps {
+    urgency: "high" | "medium" | "low" | string;
   }
 
-  const getUrgencyBadge = (urgency) => {
+  const getUrgencyBadge = (
+    urgency: UrgencyBadgeProps["urgency"]
+  ): JSX.Element => {
     switch (urgency) {
       case "high":
-        return <Badge className="bg-red-500">High</Badge>
+        return <Badge className="bg-red-500">High</Badge>;
       case "medium":
-        return <Badge className="bg-orange-500">Medium</Badge>
+        return <Badge className="bg-orange-500">Medium</Badge>;
       case "low":
-        return <Badge className="bg-blue-500">Low</Badge>
+        return <Badge className="bg-blue-500">Low</Badge>;
       default:
-        return <Badge>Unknown</Badge>
+        return <Badge>Unknown</Badge>;
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Material Requests</h1>
-          <p className="text-muted-foreground">View and respond to material requests from the admin</p>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Material Requests
+          </h1>
+          <p className="text-muted-foreground">
+            View and respond to material requests from the admin
+          </p>
         </div>
       </div>
 
       <Card>
         <CardHeader>
           <CardTitle>Filter Requests</CardTitle>
-          <CardDescription>Filter material requests by status and urgency</CardDescription>
+          <CardDescription>
+            Filter material requests by status and urgency
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-4">
@@ -226,7 +308,9 @@ export default function MaterialRequestsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Material Requests</CardTitle>
-          <CardDescription>{filteredRequests.length} material requests found</CardDescription>
+          <CardDescription>
+            {filteredRequests.length} material requests found
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -256,7 +340,11 @@ export default function MaterialRequestsPage() {
                     <TableCell>{getStatusBadge(request.status)}</TableCell>
                     <TableCell>{getUrgencyBadge(request.urgency)}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="outline" size="sm" onClick={() => handleViewRequest(request)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleViewRequest(request)}
+                      >
                         View Details
                       </Button>
                     </TableCell>
@@ -264,7 +352,10 @@ export default function MaterialRequestsPage() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center py-6 text-muted-foreground">
+                  <TableCell
+                    colSpan={8}
+                    className="text-center py-6 text-muted-foreground"
+                  >
                     No material requests found matching your filters
                   </TableCell>
                 </TableRow>
@@ -279,7 +370,9 @@ export default function MaterialRequestsPage() {
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>Material Request Details</DialogTitle>
-              <DialogDescription>Review the details and respond to this material request</DialogDescription>
+              <DialogDescription>
+                Review the details and respond to this material request
+              </DialogDescription>
             </DialogHeader>
 
             <div className="grid gap-4 py-4">
@@ -326,7 +419,9 @@ export default function MaterialRequestsPage() {
                 {selectedRequest.status === "accepted" && (
                   <>
                     <div className="col-span-2">
-                      <h3 className="font-semibold text-sm">Estimated Delivery</h3>
+                      <h3 className="font-semibold text-sm">
+                        Estimated Delivery
+                      </h3>
                       <p>{selectedRequest.estimatedDelivery}</p>
                     </div>
                     <div className="col-span-2">
@@ -350,16 +445,28 @@ export default function MaterialRequestsPage() {
                     <h3 className="font-semibold mb-2">Respond to Request</h3>
                     <div className="flex gap-4 mb-4">
                       <Button
-                        variant={responseType === "accept" ? "default" : "outline"}
-                        className={responseType === "accept" ? "bg-green-600 hover:bg-green-700" : ""}
+                        variant={
+                          responseType === "accept" ? "default" : "outline"
+                        }
+                        className={
+                          responseType === "accept"
+                            ? "bg-green-600 hover:bg-green-700"
+                            : ""
+                        }
                         onClick={() => setResponseType("accept")}
                       >
                         <CheckCircle className="mr-2 h-4 w-4" />
                         Accept
                       </Button>
                       <Button
-                        variant={responseType === "reject" ? "default" : "outline"}
-                        className={responseType === "reject" ? "bg-red-600 hover:bg-red-700" : ""}
+                        variant={
+                          responseType === "reject" ? "default" : "outline"
+                        }
+                        className={
+                          responseType === "reject"
+                            ? "bg-red-600 hover:bg-red-700"
+                            : ""
+                        }
                         onClick={() => setResponseType("reject")}
                       >
                         <XCircle className="mr-2 h-4 w-4" />
@@ -370,18 +477,22 @@ export default function MaterialRequestsPage() {
                     {responseType === "accept" && (
                       <div className="space-y-4">
                         <div>
-                          <label className="text-sm font-medium mb-1 block">Estimated Delivery Date</label>
+                          <label className="text-sm font-medium mb-1 block">
+                            Estimated Delivery Date
+                          </label>
                           <Popover>
                             <PopoverTrigger asChild>
                               <Button
                                 variant="outline"
                                 className={cn(
                                   "w-full justify-start text-left font-normal",
-                                  !estimatedDelivery && "text-muted-foreground",
+                                  !estimatedDelivery && "text-muted-foreground"
                                 )}
                               >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                {estimatedDelivery ? format(estimatedDelivery, "PPP") : "Select date"}
+                                {estimatedDelivery
+                                  ? format(estimatedDelivery, "PPP")
+                                  : "Select date"}
                               </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0">
@@ -396,7 +507,9 @@ export default function MaterialRequestsPage() {
                           </Popover>
                         </div>
                         <div>
-                          <label className="text-sm font-medium mb-1 block">Response Notes</label>
+                          <label className="text-sm font-medium mb-1 block">
+                            Response Notes
+                          </label>
                           <Textarea
                             placeholder="Add any additional notes about your acceptance..."
                             value={responseNotes}
@@ -408,7 +521,9 @@ export default function MaterialRequestsPage() {
 
                     {responseType === "reject" && (
                       <div>
-                        <label className="text-sm font-medium mb-1 block">Rejection Reason</label>
+                        <label className="text-sm font-medium mb-1 block">
+                          Rejection Reason
+                        </label>
                         <Textarea
                           placeholder="Please provide a reason for rejecting this request..."
                           value={responseNotes}
@@ -434,5 +549,5 @@ export default function MaterialRequestsPage() {
         </Dialog>
       )}
     </div>
-  )
+  );
 }
