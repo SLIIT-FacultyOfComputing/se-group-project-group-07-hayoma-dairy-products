@@ -38,7 +38,7 @@ jobs:
       run: npm ci --legacy-peer-deps
     
     - name: Run ESLint
-      run: npm run lint --if-present
+      run: npm run lint
       continue-on-error: true
 
     - name: Build Next.js app
@@ -62,7 +62,7 @@ jobs:
     
     - name: Generate Mochawesome report
       if: always()
-      run: cd Frontend && npm run test:reports
+      run: npm run test:reports
       continue-on-error: true
     
     - name: Upload Cypress videos
