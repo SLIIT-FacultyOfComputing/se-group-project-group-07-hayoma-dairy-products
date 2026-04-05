@@ -78,7 +78,6 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts"
-import { saveAs } from "file-saver"
 import Papa from "papaparse"
 
 // Type Definitions
@@ -311,7 +310,17 @@ const validatePhone = (phone: string): boolean => {
 const exportToCSV = (data: any[], filename: string) => {
   const csv = Papa.unparse(data)
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
-  saveAs(blob, filename)
+  const url = window.URL.createObjectURL(blob)
+  const link = document.createElement("a")
+
+  link.href = url
+  link.download = filename
+  link.style.display = "none"
+
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  window.URL.revokeObjectURL(url)
 }
 
 const generateSKU = (name: string, category: string): string => {

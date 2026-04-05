@@ -14,7 +14,7 @@
     "cypress:edge": "cypress run --browser edge",
     "test:e2e": "cypress run --reporter mochawesome",
     "test:e2e:debug": "cypress run --headed --no-exit",
-    "test:reports": "mochawesome-report-generator merge cypress/reports/mochawesome*.json --output cypress/reports/report.html",
+    "test:reports": "npx mochawesome-merge \"cypress/reports/*.json\" > cypress/reports/report.json && npx marge cypress/reports/report.json --reportDir cypress/reports --reportFilename report",
     "test:all": "npm run test:e2e && npm run test:reports"
   },
   "dependencies": {
