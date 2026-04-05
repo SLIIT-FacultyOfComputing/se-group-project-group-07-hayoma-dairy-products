@@ -36,6 +36,12 @@ jobs:
     - name: Run ESLint
       run: cd Frontend && npm run lint --if-present
       continue-on-error: true
+
+    - name: Build Next.js app
+      run: cd Frontend && npm run build
+      env:
+        NEXTAUTH_URL: http://localhost:3000
+        NEXTAUTH_SECRET: test-secret-key-for-ci
     
     - name: Run Cypress E2E tests
       uses: cypress-io/github-action@v6
