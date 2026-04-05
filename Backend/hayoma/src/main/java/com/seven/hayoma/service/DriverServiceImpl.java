@@ -40,9 +40,14 @@ public class DriverServiceImpl implements DriverService {
         Driver driver = driverRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Driver not found"));
 
-        driver.setName(dto.getName());
-        driver.setPhone(dto.getPhone());
-        driver.setAvailable(dto.isAvailable());
+        driver.setFullName(dto.getFullName());
+        driver.setEmail(dto.getEmail());
+        driver.setPhoneNumber(dto.getPhoneNumber());
+        driver.setLicenseNumber(dto.getLicenseNumber());
+        driver.setAddress(dto.getAddress());
+        driver.setVehicleType(dto.getVehicleType());
+        driver.setVehicleNumber(dto.getVehicleNumber());
+        driver.setActive(dto.isAvailable());
 
         return toDTO(driverRepository.save(driver));
     }
@@ -57,7 +62,7 @@ public class DriverServiceImpl implements DriverService {
         Driver driver = driverRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Driver not found"));
 
-        driver.setAvailable(!driver.isAvailable());
+        driver.setActive(!driver.isActive());
         return toDTO(driverRepository.save(driver));
     }
 
@@ -65,9 +70,14 @@ public class DriverServiceImpl implements DriverService {
     private Driver toEntity(DriverDTO dto) {
         return Driver.builder()
                 .id(dto.getId())
-                .name(dto.getName())
-                .phone(dto.getPhone())
-                .available(dto.isAvailable())
+                .fullName(dto.getFullName())
+                .email(dto.getEmail())
+                .phoneNumber(dto.getPhoneNumber())
+                .licenseNumber(dto.getLicenseNumber())
+                .address(dto.getAddress())
+                .vehicleType(dto.getVehicleType())
+                .vehicleNumber(dto.getVehicleNumber())
+                .active(dto.isAvailable())
                 .build();
     }
 
@@ -75,9 +85,14 @@ public class DriverServiceImpl implements DriverService {
     private DriverDTO toDTO(Driver driver) {
         return DriverDTO.builder()
                 .id(driver.getId())
-                .name(driver.getName())
-                .phone(driver.getPhone())
-                .available(driver.isAvailable())
+                .fullName(driver.getFullName())
+                .email(driver.getEmail())
+                .phoneNumber(driver.getPhoneNumber())
+                .licenseNumber(driver.getLicenseNumber())
+                .address(driver.getAddress())
+                .vehicleType(driver.getVehicleType())
+                .vehicleNumber(driver.getVehicleNumber())
+                .available(driver.isActive())
                 .build();
     }
 }

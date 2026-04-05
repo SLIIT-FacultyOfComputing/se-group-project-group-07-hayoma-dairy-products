@@ -1,4 +1,4 @@
-// Duplicate file, should be removed. All usages should use the correct DTO in com.seven.hayoma.dto package.
+package com.seven.hayoma.dto;
 
 import com.seven.hayoma.model.PaymentStatus;
 import com.seven.hayoma.model.SupplyStatus;

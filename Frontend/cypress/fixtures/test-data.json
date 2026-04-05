@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "email": "admin@example.com",
+      "password": "admin123",
+      "role": "admin"
+    },
+    {
+      "email": "user@example.com",
+      "password": "user123",
+      "role": "user"
+    },
+    {
+      "email": "driver@example.com",
+      "password": "driver123",
+      "role": "driver"
+    }
+  ],
+  "testData": {
+    "validEmail": "test@example.com",
+    "invalidEmail": "invalid-email",
+    "validPassword": "TestPassword123!",
+    "shortPassword": "short"
+  }
+}

@@ -1,4 +1,4 @@
-package com.hayoma.model;
+package com.seven.hayoma.model;
 
 public enum PaymentStatus {
     PAID,

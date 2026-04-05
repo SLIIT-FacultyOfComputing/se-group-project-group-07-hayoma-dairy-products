@@ -1,4 +1,4 @@
-package com.hayoma.model;
+package com.seven.hayoma.model;
 
 import jakarta.persistence.*;
 import lombok.*;
